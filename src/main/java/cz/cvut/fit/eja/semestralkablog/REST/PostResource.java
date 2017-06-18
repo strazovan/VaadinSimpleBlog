@@ -1,5 +1,7 @@
 package cz.cvut.fit.eja.semestralkablog.REST;
 
+import cz.cvut.fit.eja.semestralkablog.Controllers.AuthorController;
+import cz.cvut.fit.eja.semestralkablog.Controllers.PostController;
 import cz.cvut.fit.eja.semestralkablog.JPA.Author;
 import cz.cvut.fit.eja.semestralkablog.JPA.AuthorRepository;
 import cz.cvut.fit.eja.semestralkablog.JPA.Post;
@@ -8,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
-import javax.xml.ws.Response;
 import java.util.List;
 
 /**
@@ -20,24 +20,24 @@ import java.util.List;
 public class PostResource {
 
     @Autowired
-    PostsRepository repository;
+    PostsRepository postController;
 
     @Autowired
-    AuthorRepository authotRepository;
+    AuthorRepository authorController;
 
     @RequestMapping(value = "/getPosts", method = RequestMethod.GET)
     public List<Post> getPosts()
     {
-        return repository.findAll();
+        return postController.findAll();
     }
 
     @RequestMapping(value = "/addPost/{id}", method = RequestMethod.POST)
     public ResponseEntity<?> addPost(@PathVariable long id,
                                      @RequestBody Post post)
     {
-        Author h = authotRepository.findOne(id);
+        Author h = authorController.findOne(id);
         post.setAuthor(h);
-        repository.save(post);
+        postController.save(post);
         return ResponseEntity.status(200).build();
     }
 

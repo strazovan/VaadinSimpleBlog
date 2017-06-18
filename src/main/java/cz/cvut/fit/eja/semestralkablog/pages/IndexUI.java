@@ -7,6 +7,8 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import cz.cvut.fit.eja.semestralkablog.Controllers.AuthorController;
+import cz.cvut.fit.eja.semestralkablog.Controllers.PostController;
 import cz.cvut.fit.eja.semestralkablog.JPA.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.aspectj.weaver.ast.Not;
@@ -26,16 +28,14 @@ public class IndexUI extends UI {
     private VerticalLayout postLayout;
 
     @Autowired
-    PostsRepository postsRepository;
+    PostController postController;
 
     @Autowired
-    AuthorRepository authorRepository;
+    private AuthorController authorController;
 
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-
-//        getSession().setAttribute("user", authorRepository.findOne((long) 1));
 
         root = new VerticalLayout();
         postLayout = new VerticalLayout();
@@ -71,10 +71,10 @@ public class IndexUI extends UI {
 
             Button logout = new Button("Logout");
             logout.addClickListener(clickEvent -> {
-               getSession().setAttribute("user", null);
-               Notification.show("Logged out.");
-               root.removeAllComponents();
-               init(null);
+                getSession().setAttribute("user", null);
+                Notification.show("Logged out.");
+                root.removeAllComponents();
+                init(null);
 
             });
 
@@ -119,7 +119,7 @@ public class IndexUI extends UI {
 
         saveButton.addClickListener(clickEvent ->
         {
-            postsRepository.save(new Post(postHeader.getValue(), textEditor.getValue(), (Author) getSession().getAttribute("user")));
+            postController.addPost(postHeader.getValue(), textEditor.getValue(), (Author) getSession().getAttribute("user"));
             editor.close();
             postHeader.setValue("");
             textEditor.setValue("");
@@ -154,7 +154,7 @@ public class IndexUI extends UI {
         {
             p.setHeader(postHeader.getValue());
             p.setText(textEditor.getValue());
-            postsRepository.save(p);
+            postController.editPost(p);
             editor.close();
             refresh(null);
             Notification.show("Post edited!");
@@ -175,7 +175,8 @@ public class IndexUI extends UI {
     }
 
     private void getPosts() {
-        List<Post> posts = postsRepository.findAll();
+        List<Post> posts = postController.getPosts();
+
         Collections.reverse(posts);
         for (Post p : posts) {
             PostLayout c = new PostLayout(p);
@@ -197,7 +198,7 @@ public class IndexUI extends UI {
                 Button deleteButton = new Button("Delete");
                 deleteButton.addClickListener(clickEvent ->
                 {
-                    postsRepository.delete(p);
+                    postController.deletePost(p);
                     Notification.show("Post deleted.");
                     refresh(null);
                     Notification.show("Post deleted.");
@@ -226,11 +227,9 @@ public class IndexUI extends UI {
         confirm.addClickListener(clickEvent -> {
             String hashed = DigestUtils.sha256Hex(password.getValue());
 
-            Author user = authorRepository.findByName(username.getValue());
-            if(user != null)
-            {
-                if(user.getPassword().equals(hashed))
-                {
+            Author user = authorController.findByName(username.getValue());
+            if (user != null) {
+                if (user.getPassword().equals(hashed)) {
                     getSession().setAttribute("user", user);
                     root.removeAllComponents();
                     init(null);

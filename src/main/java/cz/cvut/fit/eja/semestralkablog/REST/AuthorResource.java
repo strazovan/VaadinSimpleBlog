@@ -1,5 +1,6 @@
 package cz.cvut.fit.eja.semestralkablog.REST;
 
+import cz.cvut.fit.eja.semestralkablog.Controllers.AuthorController;
 import cz.cvut.fit.eja.semestralkablog.JPA.Author;
 import cz.cvut.fit.eja.semestralkablog.JPA.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,12 @@ import java.util.List;
 @RestController
 public class AuthorResource {
     @Autowired
-    AuthorRepository authorRepository;
+    AuthorRepository authorController;
 
     @RequestMapping("/getAuthors")
     public List<Author> getAuthors()
     {
-        return authorRepository.findAll();
+        return authorController.findAll();
     }
 
 
