@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS POST;
+DROP TABLE IF EXISTS AUTHOR;
+
+CREATE TABLE  IF NOT EXISTS AUTHOR(authorid IDENTITY PRIMARY KEY, name TEXT, PASSWORD VARCHAR2(100));
+CREATE TABLE IF NOT EXISTS POST ( id IDENTITY PRIMARY KEY , AUTHOR_ID NUMBER, HEADER VARCHAR2(50), TEXT CLOB);
+CREATE TABLE IF NOT EXISTS COMMENT (id IDENTITY PRIMARY KEY,TEXT VARCHAR2(100), POST_ID NUMBER);
+CREATE TABLE IF NOT EXISTS LOGINS(authorid IDENTITY PRIMARY KEY, PASSWORD VARCHAR2(100));
+
+INSERT INTO AUTHOR VALUES (1, 'David', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');
+
+INSERT INTO POST(id, AUTHOR_ID, HEADER, TEXT) VALUES(1,1,'First post',  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+INSERT INTO POST(id, AUTHOR_ID, HEADER, TEXT) VALUES (2,1, 'My second post', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?');
+INSERT INTO POST(id, AUTHOR_ID, HEADER, TEXT) VALUES (3,1, 'My third post', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?');
+
+INSERT INTO COMMENT VALUES(1,'Nice one',1);
